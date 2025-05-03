@@ -1,11 +1,12 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern E-Commerce</title>
+    <title>DNPH MART - Modern E-Commerce</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
         :root {
             --primary-color: #ff9900;
@@ -16,13 +17,22 @@
             --text-light: black;
             --card-dark: #1e1e1e;
             --card-light: white;
+            --accent-color: #28a745;
+            --star-color: #ffcc00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg-dark);
             color: var(--text-dark);
-            transition: 0.3s;
+            transition: all 0.3s ease;
+            overflow: hidden;
         }
 
         .light-mode {
@@ -30,10 +40,16 @@
             color: var(--text-light);
         }
 
-        .light-mode .header, 
-        .light-mode .cart, 
-        .light-mode .footer, 
-        .light-mode .product {
+        .light-mode .header,
+        .light-mode .cart,
+        .light-mode .wishlist,
+        .light-mode .footer,
+        .light-mode .product,
+        .light-mode .search-bar,
+        .light-mode .category-filter,
+        .light-mode .modal,
+        .light-mode .order-history,
+        .light-mode .login-modal {
             background: var(--card-light);
             color: var(--text-light);
         }
@@ -44,22 +60,113 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 24px;
-            font-weight: bold;
-            border-bottom: 3px solid var(--primary-color);
+            font-size: 28px;
+            font-weight: 700;
+            border-bottom: 4px solid var(--primary-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .header button {
             background: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 10px 20px;
             border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+            margin-left: 10px;
+        }
+
+        .header button:hover {
+            background: var(--hover-color);
+        }
+
+        .search-bar {
+            background: var(--card-dark);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: center;
+            margin: 20px auto;
+            max-width: 600px;
+            border-radius: 8px;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            width: 70%;
+            font-size: 14px;
+        }
+
+        .search-bar button {
+            padding: 10px;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            background: var(--primary-color);
+            color: white;
             cursor: pointer;
             font-size: 14px;
         }
 
-        .header button:hover {
+        .search-bar button:hover {
+            background: var(--hover-color);
+        }
+
+        .category-filter {
+            background: var(--card-dark);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 0 auto 20px;
+            max-width: 1200px;
+            border-radius: 8px;
+        }
+
+        .category-filter button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            background: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .category-filter button.active {
+            background: var(--hover-color);
+        }
+
+        .category-filter button:hover {
+            background: var(--hover-color);
+        }
+
+        .sort-filter {
+            background: var(--card-dark);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 0 auto 20px;
+            max-width: 1200px;
+            border-radius: 8px;
+        }
+
+        .sort-filter select {
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            background: var(--primary-color);
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .sort-filter select:hover {
             background: var(--hover-color);
         }
 
@@ -76,10 +183,11 @@
             background: var(--card-dark);
             padding: 20px;
             border-radius: 15px;
-            transition: 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
             width: 250px;
             text-align: center;
+            animation: fadeIn 0.5s ease-in;
         }
 
         .product:hover {
@@ -90,7 +198,19 @@
         .product img {
             width: 100%;
             height: 150px;
+            object-fit: cover;
             border-radius: 10px;
+        }
+
+        .product h3 {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .product .rating {
+            color: var(--star-color);
+            font-size: 14px;
+            margin-bottom: 10px;
         }
 
         .product button {
@@ -102,41 +222,50 @@
             font-size: 14px;
             cursor: pointer;
             transition: background 0.3s;
+            margin: 5px;
         }
 
         .product button:hover {
             background: var(--hover-color);
         }
 
-        .cart {
+        .product .wishlist-btn {
+            background: var(--accent-color);
+        }
+
+        .product .wishlist-btn:hover {
+            background: #218838;
+        }
+
+        .cart, .wishlist, .order-history {
             position: fixed;
-            top: 50px;
+            top: 60px;
             right: -350px;
             background: var(--card-dark);
             padding: 20px;
             border-radius: 10px;
             width: 300px;
-            height: 400px;
+            height: 500px;
             overflow-y: auto;
             transition: right 0.3s;
             box-shadow: -5px 0 10px rgba(255, 153, 0, 0.2);
         }
 
-        .cart.show {
+        .cart.show, .wishlist.show, .order-history.show {
             right: 20px;
         }
 
-        .cart h2 {
+        .cart h2, .wishlist h2, .order-history h2 {
             font-size: 22px;
             margin-bottom: 10px;
         }
 
-        .cart ul {
+        .cart ul, .wishlist ul, .order-history ul {
             list-style: none;
             padding: 0;
         }
 
-        .cart ul li {
+        .cart ul li, .wishlist ul li, .order-history ul li {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -159,7 +288,7 @@
             background: #d93030;
         }
 
-        .cart-toggle {
+        .cart-toggle, .wishlist-toggle, .history-toggle {
             position: fixed;
             bottom: 20px;
             right: 20px;
@@ -169,74 +298,573 @@
             color: white;
             font-size: 16px;
             cursor: pointer;
+            z-index: 1000;
         }
 
-        .cart-toggle:hover {
+        .wishlist-toggle {
+            bottom: 70px;
+            background: var(--accent-color);
+        }
+
+        .history-toggle {
+            bottom: 120px;
+            background: #6c757d;
+        }
+
+        .cart-toggle:hover, .wishlist-toggle:hover, .history-toggle:hover {
             background: var(--hover-color);
+        }
+
+        .checkout-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .checkout-btn:hover {
+            background: #218838;
+        }
+
+        .modal, .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content, .login-modal-content {
+            background: var(--card-dark);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-content h2, .login-modal-content h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .modal-content p, .login-modal-content p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .modal-content button, .login-modal-content button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+
+        .modal-content button:hover, .login-modal-content button:hover {
+            background: var(--hover-color);
+        }
+
+        .login-modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .login-modal-content a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .login-modal-content a:hover {
+            color: var(--hover-color);
+        }
+
+        .footer {
+            background: var(--card-dark);
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            margin-top: 20px;
+            border-top: 3px solid var(--primary-color);
+        }
+
+        /* Loader Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            animation: fadeOut 1s ease-in-out 2s forwards;
+        }
+
+        .light-mode .loader {
+            background: var(--bg-light);
+        }
+
+        .loader h1 {
+            font-size: 48px;
+            color: var(--primary-color);
+            animation: pulse 1.5s infinite;
+        }
+
+        .main-content {
+            opacity: 0;
+            animation: fadeInContent 1s ease-in-out 2.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; display: none; }
+        }
+
+        @keyframes fadeInContent {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
-
-    <div class="header">
-        DNPH MART 🛍 
-        <button onclick="toggleTheme()">🌗 Toggle Mode</button>
+    <div class="loader">
+        <h1>DNPH MART 🛍</h1>
     </div>
-
-    <div class="product-container">
-        <div class="product">
-            <img src="https://cdn.dotpe.in/longtail/item_thumbnails/8813471/30OtCHbY-800-800.webp" alt="Nike Shoes">
-            <h3>Nike Shoes - ₹9,999</h3>
-            <button onclick="addToCart('Nike Shoes', 9999)">Add to Cart</button>
+    <div class="main-content">
+        <div class="header">
+            DNPH MART 🛍
+            <div>
+                <span id="userProfile">Guest</span>
+                <button onclick="toggleTheme()">🌗 Toggle Mode</button>
+                <button id="authButton" onclick="showLoginModal()">Login/Register</button>
+            </div>
         </div>
 
-        <div class="product">
-            <img src="https://darlingretail.com/cdn/shop/products/r1594_Starlight_PDP_Image_Position-1A_Avail__en-IN_800x.jpg?v=1662987257" alt="iPhone 14">
-            <h3>iPhone 14 - ₹79,999</h3>
-            <button onclick="addToCart('iPhone 14', 79999)">Add to Cart</button>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search products..." oninput="filterProducts()">
+            <button onclick="filterProducts()">🔍 Search</button>
         </div>
 
-        <div class="product">
-            <img src="https://www.myimaginestore.com/media/catalog/product/cache/4a48ac28cbb6e9c41470e5be5a6d3043/a/i/air-gold_2.jpeg" alt="MacBook">
-            <h3>MacBook Air - ₹1,19,999</h3>
-            <button onclick="addToCart('MacBook Air', 119999)">Add to Cart</button>
+        <div class="category-filter">
+            <button onclick="filterByCategory('all')" class="active">All</button>
+            <button onclick="filterByCategory('electronics')">Electronics</button>
+            <button onclick="filterByCategory('fashion')">Fashion</button>
+            <button onclick="filterByCategory('home')">Home</button>
+            <button onclick="filterByCategory('accessories')">Accessories</button>
         </div>
 
-        <div class="product">
-            <img src="https://sathya.in/media/90828/catalog/Samsung%2055%20Crystal%204K%20UHD%20Smart%20TV02.jpg" alt="Samsung TV">
-            <h3>Samsung TV - ₹45,999</h3>
-            <button onclick="addToCart('Samsung TV', 45999)">Add to Cart</button>
+        <div class="sort-filter">
+            <select onchange="sortProducts(this.value)">
+                <option value="default">Sort By: Default</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="rating">Rating: High to Low</option>
+            </select>
         </div>
 
-        <div class="product">
-            <img src="https://sathya.in/media/92077/catalog/03%20(37).jpg" alt="AirPods">
-            <h3>AirPods Pro - ₹24,999</h3>
-            <button onclick="addToCart('AirPods Pro', 24999)">Add to Cart</button>
+        <div class="product-container" id="productContainer"></div>
+
+        <div class="cart" id="cart">
+            <h2>Your Cart</h2>
+            <ul id="cart-items"></ul>
+            <div>Total: ₹<span id="total">0</span></div>
+            <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
         </div>
 
-        <div class="product">
-            <img src="https://www.apple.com/newsroom/images/2024/09/introducing-apple-watch-series-10/article/Apple-Watch-Series-10-watch-face-Flux-240909_inline.jpg.large.jpg" alt="Smart Watch">
-            <h3>Smart Watch - ₹12,999</h3>
-            <button onclick="addToCart('Smart Watch', 12999)">Add to Cart</button>
+        <div class="wishlist" id="wishlist">
+            <h2>Your Wishlist</h2>
+            <ul id="wishlist-items"></ul>
+        </div>
+
+        <div class="order-history" id="orderHistory">
+            <h2>Order History</h2>
+            <ul id="history-items"></ul>
+        </div>
+
+        <div class="modal" id="orderModal">
+            <div class="modal-content">
+                <h2>Order Placed Successfully!</h2>
+                <p>Your order has been confirmed. You'll receive a confirmation soon.</p>
+                <h3>Payment Details</h3>
+                <p id="paymentDetails"></p>
+                <button onclick="closeModal()">Close</button>
+            </div>
+        </div>
+
+        <div class="login-modal" id="loginModal">
+            <div class="login-modal-content">
+                <h2>Login or Register</h2>
+                <p>Please enter your credentials to access your account. New users can register to start shopping!</p>
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <div>
+                    <button onclick="login()">Login</button>
+                    <button onclick="register()">Register</button>
+                </div>
+                <p><a href="#" onclick="alert('Forgot Password feature coming soon!')">Forgot Password?</a></p>
+            </div>
+        </div>
+
+        <button class="cart-toggle" onclick="toggleCart()">🛒 View Cart</button>
+        <button class="wishlist-toggle" onclick="toggleWishlist()">❤️ Wishlist</button>
+        <button class="history-toggle" onclick="toggleHistory()">📜 Order History</button>
+
+        <div class="footer">
+            © 2025 DNPH MART. All rights reserved.
         </div>
     </div>
-
-    <div class="cart" id="cart">
-        <h2>Your Cart</h2>
-        <ul id="cart-items"></ul>
-        <div>Total: ₹<span id="total">0</span></div>
-    </div>
-
-    <button class="cart-toggle" onclick="toggleCart()">🛒 View Cart</button>
 
     <script>
-        let cart = [];
-        function addToCart(product, price) { cart.push({ product, price }); updateCart(); }
-        function updateCart() { document.getElementById("cart-items").innerHTML = cart.map((item, index) => `<li>${item.product} - ₹${item.price} <button class="remove-btn" onclick="removeItem(${index})">X</button></li>`).join(""); document.getElementById("total").textContent = cart.reduce((acc, item) => acc + item.price, 0); }
-        function removeItem(index) { cart.splice(index, 1); updateCart(); }
-        function toggleCart() { document.getElementById("cart").classList.toggle("show"); }
-        function toggleTheme() { document.body.classList.toggle("light-mode"); }
-    </script>
+        // Mock backend data with 30 items
+        const products = [
+            { id: 1, name: "Nike Shoes", price: 9999, category: "fashion", image: "https://cdn.dotpe.in/longtail/item_thumbnails/8813471/30OtCHbY-800-800.webp", rating: 4.5 },
+            { id: 2, name: "iPhone 14", price: 79999, category: "electronics", image: "https://darlingretail.com/cdn/shop/products/r1594_Starlight_PDP_Image_Position-1A_Avail__en-IN_800x.jpg?v=1662987257", rating: 4.8 },
+            { id: 3, name: "MacBook Air", price: 119999, category: "electronics", image: "https://www.myimaginestore.com/media/catalog/product/cache/4a48ac28cbb6e9c41470e5be5a6d3043/a/i/air-gold_2.jpeg", rating: 4.7 },
+            { id: 4, name: "Samsung TV", price: 45999, category: "electronics", image: "https://sathya.in/media/90828/catalog/Samsung%2055%20Crystal%204K%20UHD%20Smart%20TV02.jpg", rating: 4.3 },
+            { id: 5, name: "AirPods Pro", price: 24999, category: "accessories", image: "https://sathya.in/media/92077/catalog/03%20(37).jpg", rating: 4.6 },
+            { id: 6, name: "Smart Watch", price: 12999, category: "accessories", image: "https://www.apple.com/newsroom/images/2024/09/introducing-apple-watch-series-10/article/Apple-Watch-Series-10-watch-face-Flux-240909_inline.jpg.large.jpg", rating: 4.4 },
+            { id: 7, name: "Adidas Jacket", price: 5999, category: "fashion", image: "https://m.media-amazon.com/images/I/41LWhdnERdL.jpg", rating: 4.2 },
+            { id: 8, name: "Sony Headphones", price: 14999, category: "electronics", image: "https://m.media-amazon.com/images/I/510cs9VwjUL._AC_UF1000,1000_QL80_.jpg", rating: 4.5 },
+            { id: 9, name: "Levi's Jeans", price: 3999, category: "fashion", image: "https://levi.in/cdn/shop/files/A70870032_01_Front_abc8a15c-4888-4eb7-a787-1c329de29b80.jpg?v=1740488428", rating: 4.3 },
+            { id: 10, name: "Dyson Vacuum", price: 34999, category: "home", image: "https://images-cdn.ubuy.co.in/64ce3b7b81d8d86bce693446-dyson-v8-fluffy-cordless-vacuum-red.jpg", rating: 4.6 },
+            { id: 11, name: "Kitchen Mixer", price: 7999, category: "home", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsLTdM-VHxjEb2RWrnhAzoD667p3K-o17cBQ&s", rating: 4.1 },
+            { id: 12, name: "Gaming Console", price: 49999, category: "electronics", image: "https://cdn.lotuselectronics.com/webpimages/590031IM.webp", rating: 4.8 },
+            { id: 13, name: "Running Shoes", price: 7999, category: "fashion", image: "https://uspoloassn.in/cdn/shop/files/1_b68e6977-de25-4e06-a361-c46195beced9.jpg", rating: 4.4 },
+            { id: 14, name: "Smart Speaker", price: 9999, category: "electronics", image: "https://akm-img-a-in.tosshub.com/businesstoday/images/story/201910/new_echo_660x450_092619095922_102419075453.jpg?size=948:533", rating: 4.2 },
+            { id: 15, name: "Sunglasses", price: 2999, category: "accessories", image: "https://m.media-amazon.com/images/I/51wwVl2r-WL._AC_UY1100_.jpg", rating: 4.3 },
+            { id: 16, name: "Backpack", price: 4999, category: "accessories", image: "https://safaribags.com/cdn/shop/files/3_4bde5165-92cd-4305-b571-dea21fe6568e.jpg?v=1707731843", rating: 4.5 },
+            { id: 17, name: "Coffee Maker", price: 5999, category: "home", image: "https://rukminim2.flixcart.com/image/850/1000/xif0q/coffee-maker/n/j/j/63153711-regalia-espresso-wonderchef-original-imah2fyed5hnvmep.jpeg?q=90&crop=false", rating: 4.0 },
+            { id: 18, name: "Fitness Tracker", price: 6999, category: "accessories", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAmH1rEC9foQ84u_xkIU01P-yoRG3s30xUCQ&s", rating: 4.4 },
+            { id: 19, name: "Desk Lamp", price: 2999, category: "home", image: "https://www.mojolife.in/cdn/shop/files/desk-1_2.png?v=1727094719", rating: 4.2 },
+            { id: 20, name: "Wireless Mouse", price: 1999, category: "electronics", image: "https://rukminim3.flixcart.com/image/850/1000/xif0q/mouse/3/1/t/dash-2-4ghz-wireless-bluetooth-5-1-mouse-dual-mode-slim-original-imagvwthxhgxtjt6.jpeg?q=90&crop=false", rating: 4.3 },
+            { id: 21, name: "Puma T-Shirt", price: 2499, category: "fashion", image: "https://assets.myntassets.com/h_1440,q_100,w_1080/v1/assets/images/28048440/2024/4/16/d51a66cf-de1e-4076-b7a2-9fdac7bcdf961713260949425-Logo-Boys-T-shirt-4111713260949251-1.jpg", rating: 4.1 },
+            { id: 22, name: "Bluetooth Speaker", price: 7999, category: "electronics", image: "https://m.media-amazon.com/images/I/71hvGkBMFNL._AC_UF1000,1000_QL80_.jpg", rating: 4.6 },
+            { id: 23, name: "Ceramic Cookware Set", price: 12999, category: "home", image: "https://images-cdn.ubuy.qa/64ce8d7386079959277f77ba-mainstays-ceramic-nonstick-aluminum-12.jpg", rating: 4.4 },
+            { id: 24, name: "Winter Scarf", price: 1499, category: "fashion", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiLQu5goVylPmmZtko-CBhW-ZYi-oTm8aj7w&s", rating: 4.0 },
+            { id: 25, name: "Smart Thermostat", price: 15999, category: "home", image: "https://cdn.thewirecutter.com/wp-content/media/2023/09/smartthermostats-2048px-2898-3x2-1.jpg", rating: 4.5 },
+            { id: 26, name: "Leather Wallet", price: 2499, category: "accessories", image: "https://m.media-amazon.com/images/I/81WIcyHQ7oL._AC_UY1100_.jpg", rating: 4.3 },
+            { id: 27, name: "Portable Charger", price: 3999, category: "electronics", image: "https://media.wired.com/photos/6504b2a1afe02332db973557/master/w_320%2Cc_limit/Ugreen_Power_Bank-SOURCE-Ugreen-Gear.jpg", rating: 4.7 },
+            { id: 28, name: "Yoga Mat", price: 2999, category: "accessories", image: "https://wiselife.in/cdn/shop/files/1_c32957ca-8b92-4e21-b32d-395717efbd7d.jpg?v=1708681826", rating: 4.2 },
+            { id: 29, name: "Electric Kettle", price: 4999, category: "home", image: "https://m.media-amazon.com/images/I/51Q11RNy8dL._AC_UF894,1000_QL80_.jpg", rating: 4.3 },
+            { id: 30, name: "Casual Sneakers", price: 6499, category: "fashion", image: "https://assets.myntassets.com/w_412,q_60,dpr_2,fl_progressive/assets/images/24627398/2023/8/24/b6d0d21a-ad29-4a00-bd37-5d5cba43bcbf1692850462560RoadsterMenCasualShoes1.jpg", rating: 4.4 }
+        ];
 
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+        let orderHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+        let isLoggedIn = JSON.parse(localStorage.getItem('isLoggedIn')) || false;
+        let users = JSON.parse(localStorage.getItem('users')) || {};
+
+        // Initialize UI based on auth state
+        function initAuth() {
+            const userProfile = document.getElementById('userProfile');
+            const authButton = document.getElementById('authButton');
+            if (isLoggedIn) {
+                userProfile.textContent = localStorage.getItem('username') || 'User';
+                authButton.textContent = 'Logout';
+                authButton.onclick = logout;
+            } else {
+                userProfile.textContent = 'Guest';
+                authButton.textContent = 'Login/Register';
+                authButton.onclick = showLoginModal;
+            }
+            updateCart();
+            updateWishlist();
+            updateOrderHistory();
+        }
+
+        // Show login modal
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        // Login function
+        function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            if (!username || !password) {
+                alert('Please enter both username and password!');
+                return;
+            }
+            if (users[username] && users[username].password === password) {
+                isLoggedIn = true;
+                localStorage.setItem('isLoggedIn', JSON.stringify(isLoggedIn));
+                localStorage.setItem('username', username);
+                document.getElementById('loginModal').style.display = 'none';
+                initAuth();
+            } else {
+                alert('Invalid username or password!');
+            }
+        }
+
+        // Register function
+        function register() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            if (!username || !password) {
+                alert('Please enter both username and password!');
+                return;
+            }
+            if (users[username]) {
+                alert('Username already exists! Please choose another.');
+                return;
+            }
+            users[username] = { password, createdAt: new Date().toLocaleString() };
+            localStorage.setItem('users', JSON.stringify(users));
+            alert('Registration successful! Please login.');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        // Logout function
+        function logout() {
+            isLoggedIn = false;
+            localStorage.setItem('isLoggedIn', JSON.stringify(isLoggedIn));
+            localStorage.removeItem('username');
+            cart = [];
+            wishlist = [];
+            localStorage.removeItem('cart');
+            localStorage.removeItem('wishlist');
+            document.getElementById('loginModal').style.display = 'none';
+            initAuth();
+        }
+
+        // Render products
+        function renderProducts(productsToShow) {
+            const container = document.getElementById("productContainer");
+            container.innerHTML = productsToShow.map(product => `
+                <div class="product">
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name} - ₹${product.price}</h3>
+                    <div class="rating">${renderStars(product.rating)}</div>
+                    <button onclick="addToCart(${product.id})">Add to Cart</button>
+                    <button class="wishlist-btn" onclick="addToWishlist(${product.id})">❤️ Add to Wishlist</button>
+                </div>
+            `).join("");
+        }
+
+        // Render star ratings
+        function renderStars(rating) {
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 >= 0.5 ? 1 : 0;
+            const emptyStars = 5 - fullStars - halfStar;
+            return (
+                "★".repeat(fullStars) +
+                (halfStar ? "☆" : "") +
+                "☆".repeat(emptyStars)
+            );
+        }
+
+        // Initial render
+        renderProducts(products);
+        initAuth();
+
+        // Add to cart
+        function addToCart(productId) {
+            if (!isLoggedIn) {
+                alert("Please login to add items to cart!");
+                return;
+            }
+            const product = products.find(p => p.id === productId);
+            cart.push({ ...product });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCart();
+        }
+
+        // Update cart
+        function updateCart() {
+            const cartItems = document.getElementById("cart-items");
+            cartItems.innerHTML = cart.map((item, index) => `
+                <li>${item.name} - ₹${item.price} <button class="remove-btn" onclick="removeFromCart(${index})">X</button></li>
+            `).join("");
+            document.getElementById("total").textContent = cart.reduce((acc, item) => acc + item.price, 0);
+        }
+
+        // Remove from cart
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCart();
+        }
+
+        // Add to wishlist
+        function addToWishlist(productId) {
+            if (!isLoggedIn) {
+                alert("Please login to add items to wishlist!");
+                return;
+            }
+            const product = products.find(p => p.id === productId);
+            if (!wishlist.find(item => item.id === productId)) {
+                wishlist.push({ ...product });
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                updateWishlist();
+            }
+        }
+
+        // Update wishlist
+        function updateWishlist() {
+            const wishlistItems = document.getElementById("wishlist-items");
+            wishlistItems.innerHTML = wishlist.map((item, index) => `
+                <li>${item.name} - ₹${item.price} <button class="remove-btn" onclick="removeFromWishlist(${index})">X</button></li>
+            `).join("");
+        }
+
+        // Remove from wishlist
+        function removeFromWishlist(index) {
+            wishlist.splice(index, 1);
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            updateWishlist();
+        }
+
+        // Update order history
+        function updateOrderHistory() {
+            const historyItems = document.getElementById("history-items");
+            historyItems.innerHTML = orderHistory.map((order, index) => `
+                <li>Order ${index + 1}: ₹${order.total} (${order.items.length} items)</li>
+            `).join("");
+        }
+
+        // Filter products by category
+        function filterByCategory(category) {
+            const buttons = document.querySelectorAll(".category-filter button");
+            buttons.forEach(btn => btn.classList.remove("active"));
+            event.target.classList.add("active");
+
+            const filteredProducts = category === "all" ? products : products.filter(p => p.category === category);
+            renderProducts(filteredProducts);
+        }
+
+        // Search products
+        function filterProducts() {
+            const query = document.getElementById("searchInput").value.toLowerCase().trim();
+            if (query.length === 0) {
+                alert("Please enter a search term!");
+                renderProducts(products);
+                return;
+            }
+            const filteredProducts = products.filter(p => p.name.toLowerCase().includes(query));
+            renderProducts(filteredProducts);
+        }
+
+        // Sort products
+        function sortProducts(criteria) {
+            let sortedProducts = [...products];
+            if (criteria === "price-low") {
+                sortedProducts.sort((a, b) => a.price - b.price);
+            } else if (criteria === "price-high") {
+                sortedProducts.sort((a, b) => b.price - a.price);
+            } else if (criteria === "rating") {
+                sortedProducts.sort((a, b) => b.rating - a.rating);
+            }
+            renderProducts(sortedProducts);
+        }
+
+        // Toggle cart
+        function toggleCart() {
+            document.getElementById("cart").classList.toggle("show");
+            document.getElementById("wishlist").classList.remove("show");
+            document.getElementById("orderHistory").classList.remove("show");
+        }
+
+        // Toggle wishlist
+        function toggleWishlist() {
+            document.getElementById("wishlist").classList.toggle("show");
+            document.getElementById("cart").classList.remove("show");
+            document.getElementById("orderHistory").classList.remove("show");
+        }
+
+        // Toggle order history
+        function toggleHistory() {
+            document.getElementById("orderHistory").classList.toggle("show");
+            document.getElementById("cart").classList.remove("show");
+            document.getElementById("wishlist").classList.remove("show");
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            document.body.classList.toggle("light-mode");
+        }
+
+        // Generate mock payment ID
+        function generatePaymentId() {
+            return 'PAY' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        }
+
+        // Checkout
+        function checkout() {
+            if (!isLoggedIn) {
+                alert("Please login to checkout!");
+                return;
+            }
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+            const total = cart.reduce((acc, item) => acc + item.price, 0);
+            orderHistory.push({
+                items: [...cart],
+                total,
+                date: new Date().toLocaleString()
+            });
+            localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
+            const paymentDetails = `
+                Payment ID: ${generatePaymentId()}<br>
+                Amount: ₹${total}<br>
+                Method: Credit Card<br>
+                Date: ${new Date().toLocaleString()}
+            `;
+            document.getElementById("paymentDetails").innerHTML = paymentDetails;
+            document.getElementById("orderModal").style.display = "flex";
+            cart = [];
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCart();
+            updateOrderHistory();
+            toggleCart();
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById("orderModal").style.display = "none";
+        }
+
+        // Remove loader and enable scrolling
+        setTimeout(() => {
+            document.body.style.overflow = "auto";
+        }, 2500);
+    </script>
 </body>
 </html>
